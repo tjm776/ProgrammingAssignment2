@@ -1,58 +1,50 @@
-## These set of functions get a matrix.  Then computes its inverse
+## These set of functions create a special matrix.  Then computes it inverse
 ## and caches the results. Then determines if the inverse has been calculated 
-## before.  If true then the cached results are returned.
+## before and the matrix has not changed.  If these are true then the cached
+## results are returned.
 
-## For function "makeCacheMatrix", input the matrix "x", then create the
-## functions called by "cacheSolve".
+## Create the matrix, calulate the inverse, store all in cache.
 
 makeCacheMatrix <- function(x = numeric()) {
-        
-        ## Use "i" as the inverse, set it to NULL each time "makeCacheMatrx"
-        ## is called
-        i <- NULL
-        
-        
-        ## Set the stored inverse of the matrix to NULL and new value for "x"
-        set <- function(new_x) {
-                x <<- new_x
-                i <<- NULL
+        m <- NULL
+        set <- function(y) {
+                x <<- y
+                m <<- NULL
         }
-        
-        ## Returns the value of the matrix the first time running "cacheSolve"
         get <- function() x
-        
-        ## Sets the inverse of the matrix when "cacheSolve" is first run
-        setinvrs <- function(solve) i <<- solve
-        
-        ## This returns the cache value to "cacheSolve" after the first run
-        getinvrs <- function() i
-        
-        ## Creast a list for the functions so they can be called
+        setinvrs <- function(solve) m <<- solve
+        getinvrs <- function() m
         list(set = set, get = get,
              setinvrs = setinvrs,
              getinvrs = getinvrs)
 }
 
 
-## Determine if the results are cached.  IF they are return a message and the
-## cache results.  If not then calulate the inverse of the mateix and cache it.
+## Compare the inverse of the matrix and determine if the matrix has changed 
 
 cacheSolve <- function(x, ...) {
-        
-        ## Get the value of the "x" and assign it to "i".
-        i <- x$getinvrs()
-        
-        ## If inverse already calculated then send this message, return the
-        ## cache results and end the function.
-        if(!is.null(i)) {
+        m <- x$getinvrs()
+        if(!is.null(m)) {
                 message("Cached results are returned")
-                return(i)
+                return(m)
         }
-        
-        ## If x$getinvrs is NULL then get the matrix, calculate the inverse
-        ## and cache it.
         data <- x$get()
-        i <- solve(data, ...)
-        x$setinvrs(i)
-        i
+        m <- solve(data, ...)
+        x$setinvrs(m)
+        m
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
